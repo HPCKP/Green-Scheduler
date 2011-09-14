@@ -97,9 +97,9 @@ WUCandidate() {
 WUnodes() {
     node=$1
     utime=$(date +%s)
-    ipmitool -I lanplus -H ${node}-ilo -U $LOGIN -P $PASSWD chassis bootdev disk
-    ipmitool -I lanplus -H ${node}-ilo -U $LOGIN -P $PASSWD chassis power on 
-    ipmitool -I lanplus -H ${node}-ilo -U $LOGIN -P $PASSWD chassis bootdev disk
+    ipmitool -I lanplus -H ${node}-ilo -U admin -P admin chassis bootdev disk
+    ipmitool -I lanplus -H ${node}-ilo -U admin -P admin chassis power on 
+    ipmitool -I lanplus -H ${node}-ilo -U admin -P admin chassis bootdev disk
     log UP $node $utime
     acct $node $utime
 }

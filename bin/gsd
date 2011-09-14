@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+#                        Green Scheduler Daemon 
+#===============================================================================
+# AUTHOR:                                      Written by Jordi Blasco Pallarès
+# REPORTING BUGS:                       Report bugs to <jordi.blasco@gmail.com>.
+#   Please report all bugs after reviewing project details located at
+#              http://sourceforge.net/projects/greenscheduler/
+#===============================================================================
+#
+# Valid for Linux/Debian Style
+
+DAEMON=/usr/local/greenscheduler/bin/greenscheduler.sh
+NAME=gsd
+DESC="Green Scheduler Daemon (gsd)"
+
+test -x $DAEMON || exit 0
+
+
+set -e
+
+case "$1" in
+start)
+     echo -n "Iniciant $DESC: $NAME"
+     #start-stop-daemon --start --quiet --pidfile /var/run/gsd.pid --exec $DAEMON &
+     #PID=`ps -fea | grep gsd | head -1| gawk '{print $2}'`
+     #echo $PID  > /var/run/gsd.pid
+     #For debian
+     start-stop-daemon -b --start --quiet --pidfile /var/run/gsd.pid --exec $DAEMON
+     echo "."
+    ;;
+stop)
+    echo -n "Aturant $DESC: gsd"
+    #start-stop-daemon --stop --quiet --pidfile /var/run/gsd.pid
+    start-stop-daemon --stop --quiet --oknodo --pidfile /var/run/gsd.pid
+    #kill $PID
+    echo "."
+    ;;
+*)
+    echo "Usage: /etc/init.d/gsd {start|stop|restart}"
+    exit 1
+esac
+
+exit 0

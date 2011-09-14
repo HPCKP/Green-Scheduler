@@ -1,0 +1,19 @@
+##############################################################
+#                     Variables to edit                      #
+##############################################################
+MAIL=jordi.blasco@xrqtc.org
+# Timeout in seconds - suggested 10 minuts (600 seconds)
+TIMEOUT=600
+LOGFILE=/var/log/greenscheduler.log
+ACCTFILE=/var/log/greenscheduler.acct
+WORKDIR=/var/cache/greenscheduler
+# BQS can be SGE, Torque, LSF, Slurm, PBS
+BQS=SGE
+BQSPATH=/sge
+# Min. free SLOTS (per queue)
+FNSLOTS=24
+# Sort Policy 1:Temperature, 2:Reboots, 3:NeighboursTemperature
+SP=1
+# Login and Passwd of IPMI and BMC
+LOGIN=admin
+PASSWD=admin
