@@ -8,7 +8,7 @@
 #              http://sourceforge.net/projects/greenscheduler/
 #===============================================================================
 #
-#set -xv
+set -xv
 source /etc/greenscheduler/greenscheduler.conf
 
 if [ -d $WORKDIR ]; then mkdir -p $WORKDIR; fi
@@ -27,7 +27,8 @@ if [ $BQS = "SGE" ]; then
    }
    qwjobs() {
       QW=0
-      QW=$(qstat -u *, -s p -q $1 | wc -l)
+      #QW=$(qstat -u *, -s p -q $1 | wc -l)
+      QW=$(qstat -u *, -s p | wc -l) # GE don't filter the qw jobs by queue!!! I have to review job by job. 
    }
    disablenode() {
      qmod -d $1@$2
