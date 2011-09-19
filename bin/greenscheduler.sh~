@@ -113,6 +113,8 @@ WUnodes() {
       ;;
       imb)
       ;;
+      open)
+      ;;
       sun)
       ;;
       *)

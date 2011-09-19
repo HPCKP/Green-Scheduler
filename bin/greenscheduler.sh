@@ -99,9 +99,9 @@ WUnodes() {
     utime=$(date +%s)
     case in $ITYPE
       lanplus)
-	ipmitool -I lanplus -H ${node}-ilo -U $LOGIN -P $PASSWD chassis bootdev disk
-	ipmitool -I lanplus -H ${node}-ilo -U $LOGIN -P $PASSWD chassis power on 
-	ipmitool -I lanplus -H ${node}-ilo -U $LOGIN -P $PASSWD chassis bootdev disk
+	ipmitool -I lanplus -H ${node}-${IHEX} -U $LOGIN -P $PASSWD chassis bootdev disk
+	ipmitool -I lanplus -H ${node}-${IHEX} -U $LOGIN -P $PASSWD chassis power on 
+	ipmitool -I lanplus -H ${node}-${IHEX} -U $LOGIN -P $PASSWD chassis bootdev disk
       ;;
       bmc)
       ;;
