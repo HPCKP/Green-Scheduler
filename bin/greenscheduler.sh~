@@ -21,8 +21,8 @@ if [ $BQS = "SGE" ];then
    hoststats="qhost | gawk 'BEGIN{NL=2}{print $0}' | grep -v HOSTNAME | grep -v global"
    queues="qconf -sql"
    qwjobs="qstat -u *, -s p -q "
-   disablenode="qmod -d "
-   enablenode="qmod -e "
+   disablenode="qmod -d $1@$2"
+   enablenode="qmod -e $1@$2"
 
 elif [ $BQS = "PBS" ];then
 
@@ -62,9 +62,9 @@ log(){
 acct(){
     node=$1
     UWU=$2
-    USD=$(cat $LOGFILE | grep DOWN | grep $node | tail -1)
+    USD=$(cat $LOGFILE | grep DOWN | grep $node | tail -1 | gawk '{print $1}')
     TSAVED=$(($UWU-$USD))
-    PSAVED=$((echo "$TSAVED*475/3600"| bc -l))
+    PSAVED=$((echo "$TSAVED*$PCONSUM/3600"| bc -l))
     echo "$(date)  $node  TimeSaved  $TSAVED  PowerSaved  $PSAVED"
 }
 
@@ -82,7 +82,7 @@ queue=$1
 $ToSTOP=$(SDCandidate $queue $EFSLOTS)
 for node in $ToSTOP
     do
-      $disablenode $node
+      $disablenode $queue $node
       vrfy=$(qhost -h $node | grep $node | gawk '{if ($4 < 1){print 1}}')
       if $vrfy; then SDnodes $node; fi
     done
@@ -97,9 +97,28 @@ WUCandidate() {
 WUnodes() {
     node=$1
     utime=$(date +%s)
-    ipmitool -I lanplus -H ${node}-ilo -U admin -P admin chassis bootdev disk
-    ipmitool -I lanplus -H ${node}-ilo -U admin -P admin chassis power on 
-    ipmitool -I lanplus -H ${node}-ilo -U admin -P admin chassis bootdev disk
+    case in $ITYPE
+      lanplus)
+	ipmitool -I lanplus -H ${node}-ilo -U $LOGIN -P $PASSWD chassis bootdev disk
+	ipmitool -I lanplus -H ${node}-ilo -U $LOGIN -P $PASSWD chassis power on 
+	ipmitool -I lanplus -H ${node}-ilo -U $LOGIN -P $PASSWD chassis bootdev disk
+      ;;
+      bmc)
+      ;;
+      lipmi)
+      ;;
+      lan)
+      ;;
+      free)
+      ;;
+      imb)
+      ;;
+      sun)
+      ;;
+      *)
+	echo "You must setup a valid IPMI Type in the configuration file."
+      ;;
+    esac
     log UP $node $utime
     acct $node $utime
 }
@@ -110,7 +129,7 @@ ToWakeUp=$(WUCandidate $queue $NSLOTS)
 for node in $ToWakeUp
     do
       WUnodes $node
-      $enablenode $node
+      $enablenode $queue $node
     done
 }
 

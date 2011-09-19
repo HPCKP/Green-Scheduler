@@ -17,7 +17,7 @@ SP=1
 # Login and Passwd of IPMI and BMC
 LOGIN=admin
 PASSWD=admin
-# IPMI Type it can be : bmc, lipmi, lan, lanplus, free, imb, sun, open.
+# IPMI Type
 ITYPE=lanplus
 # Power Consumption in kW/hour
 PCONSUM=475
