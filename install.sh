@@ -25,5 +25,5 @@ cp -pr * /usr/local/greenscheduler/
 ln -s /usr/local/greenscheduler/bin/gsd /etc/init.d/gsd
 ln -s /usr/local/greenscheduler/etc/greenscheduler /etc/greenscheduler
 echo "Making cache directory..."
-mkdir -p /var/cache/injectiondenied
+mkdir -p /var/cache/greenscheduler
 echo "Installation Complete"
