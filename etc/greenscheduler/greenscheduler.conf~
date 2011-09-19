@@ -19,5 +19,7 @@ LOGIN=admin
 PASSWD=admin
 # IPMI Type it can be : bmc, lipmi, lan, lanplus, free, imb, sun, open.
 ITYPE=lanplus
+# Hostname extension for IPMI Device, example : node01 and node01-impi
+IHEX=ipmi
 # Power Consumption in kW/hour
 PCONSUM=475

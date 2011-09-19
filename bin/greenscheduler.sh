@@ -117,6 +117,10 @@ WUnodes() {
       ;;
       sun)
       ;;
+      xen)
+	#This it isn't a real IPMI, but can be used to test and debug this project. 
+	ssh xadmin@sge "xm create /etc/xen/vm_${node}.cfg"
+      ;;
       *)
 	echo "You must setup a valid IPMI Type in the configuration file."
       ;;

@@ -99,9 +99,9 @@ WUnodes() {
     utime=$(date +%s)
     case in $ITYPE
       lanplus)
-	ipmitool -I lanplus -H ${node}-ilo -U $LOGIN -P $PASSWD chassis bootdev disk
-	ipmitool -I lanplus -H ${node}-ilo -U $LOGIN -P $PASSWD chassis power on 
-	ipmitool -I lanplus -H ${node}-ilo -U $LOGIN -P $PASSWD chassis bootdev disk
+	ipmitool -I lanplus -H ${node}-${IHEX} -U $LOGIN -P $PASSWD chassis bootdev disk
+	ipmitool -I lanplus -H ${node}-${IHEX} -U $LOGIN -P $PASSWD chassis power on 
+	ipmitool -I lanplus -H ${node}-${IHEX} -U $LOGIN -P $PASSWD chassis bootdev disk
       ;;
       bmc)
       ;;
@@ -116,6 +116,10 @@ WUnodes() {
       open)
       ;;
       sun)
+      ;;
+      xen)
+	#This it is not a real IPMI, but can be used to test and debug this project. 
+	ssh xadmin@sge "xm create /etc/xen/vm_${node}.cfg"
       ;;
       *)
 	echo "You must setup a valid IPMI Type in the configuration file."
