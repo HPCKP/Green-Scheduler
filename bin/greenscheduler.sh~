@@ -118,7 +118,7 @@ WUnodes() {
       sun)
       ;;
       xen)
-	#This it is not a real IPMI, but can be used to test and debug this project. 
+	#This it isn't a real IPMI, but can be used to test and debug this project. 
 	ssh xadmin@sge "xm create /etc/xen/vm_${node}.cfg"
       ;;
       *)

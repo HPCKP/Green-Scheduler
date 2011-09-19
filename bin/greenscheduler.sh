@@ -19,7 +19,8 @@ if [ $BQS = "SGE" ];then
    export SGE_ROOT=$BQSPATH
    . $SGE_ROOT/default/common/settings.sh
    hoststats="qhost | gawk 'BEGIN{NL=2}{print $0}' | grep -v HOSTNAME | grep -v global"
-   queues="qconf -sql"
+   #queues="qconf -sql"
+   queues="qconf -sql | grep xhpc.q"  # We only use xhpc.q in order to verify and test the performance.
    qwjobs="qstat -u *, -s p -q "
    disablenode="qmod -d $1@$2"
    enablenode="qmod -e $1@$2"
