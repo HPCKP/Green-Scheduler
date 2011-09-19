@@ -8,7 +8,7 @@
 #              http://sourceforge.net/projects/greenscheduler/
 #===============================================================================
 #
-set -xv
+#set -xv
 source /etc/greenscheduler/greenscheduler.conf
 
 if [ -d $WORKDIR ]; then mkdir -p $WORKDIR; fi
@@ -22,17 +22,21 @@ if [ $BQS = "SGE" ]; then
    }
 
    queues() {
-      #qconf -sql
-      qconf -sql | grep xhpc.q  # We only use xhpc.q in order to verify and test the performance.
+      #queues=$(qconf -sql)  # We only use xhpc.q in order to verify and test the performance.
+      queues=$(qconf -sql | grep xhpc.q)  # We only use xhpc.q in order to verify and test the performance.
    }
    qwjobs() {
-      qstat -u *, -s p -q 
+      QW=0
+      QW=$(qstat -u *, -s p -q $1 | wc -l)
    }
    disablenode() {
      qmod -d $1@$2
    }
    enablenode() {
      qmod -e $1@$2
+   }
+   freeslots() {
+     FSLOTS=$(qstat -g c -q $1 | tail -1 | gawk '{print $5}')
    }
 
 
@@ -53,7 +57,7 @@ else
 fi
 
 nodestatus() {
-    whost=$(cat /etc/greenscheduler/whost)
+    whost=$(cat /etc/greenscheduler/whost | gawk '{print $1}')
     hoststats > $WORKDIR/nodestatus.dat
     for ahost in $whost
        do 
@@ -161,8 +165,8 @@ for node in $ToWakeUp
 
 CheckQueues() {
     for q in $1; do 
-	QW=0
-	QW=$($qwjobs $q)
+	qwjobs $q
+	freeslots $q
 	if (( $QW < 0 )); then
 	    NSLOTS=$(($FSLOTS-$MFNSLOTS))
 	    # Needed Slots : it will determine how many nodes it will need to wakeup
@@ -170,7 +174,7 @@ CheckQueues() {
 		Enablenodes $q $NSLOTS
 	    fi
 	    
-	elif (( $QW => 0 )); then
+	elif (( $QW >= 0 )); then
 	    # Exedent Free Slots : it will determine how many nodes it will need to stop
 	    EFSLOTS=$(($FSLOTS-$MFNSLOTS))
 	    if (( $EFSLOTS > 0 )) ; then
@@ -188,6 +192,7 @@ CheckQueues() {
 while true
 do
     nodestatus
+    queues
     CheckQueues $queues
     sleep $TIMEOUT
 done
