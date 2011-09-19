@@ -171,6 +171,7 @@ CheckQueues() {
 	    NSLOTS=$(($FSLOTS-$MFNSLOTS))
 	    # Needed Slots : it will determine how many nodes it will need to wakeup
 	    if (( $NSLOTS > 0 )) ; then
+                echo "enable"
 		Enablenodes $q $NSLOTS
 	    fi
 	    
@@ -178,6 +179,7 @@ CheckQueues() {
 	    # Exedent Free Slots : it will determine how many nodes it will need to stop
 	    EFSLOTS=$(($FSLOTS-$MFNSLOTS))
 	    if (( $EFSLOTS > 0 )) ; then
+                echo "disable"
 		Disablenodes $q $EFSLOTS
 	    fi
 	fi
